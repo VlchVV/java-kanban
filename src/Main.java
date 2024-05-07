@@ -25,14 +25,20 @@ public class Main {
         Subtask subtask3 = new Subtask(taskManager.getNextTaskId(), "Подзадача 3 эпик 2", "", epic2);
         taskManager.addTask(subtask3);
         System.out.println(taskManager.getAllTasks());
+        System.out.println(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllSubtasks());
         subtask3.setStatus(Status.DONE);
         subtask2.setStatus(Status.IN_PROGRESS);
         taskManager.updateTask(subtask3);
         taskManager.updateTask(subtask2);
         System.out.println(taskManager.getAllTasks());
-        System.out.println(taskManager.getTasksByType(Epic.class));
+        System.out.println(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllSubtasks());
+        System.out.println(taskManager.getTaskById(3));
         taskManager.deleteTaskById(3);
         taskManager.deleteTaskById(6);
         System.out.println(taskManager.getAllTasks());
+        System.out.println(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllSubtasks());
     }
 }
