@@ -3,7 +3,7 @@ package tracker.service;
 import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Task;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TaskManager {
@@ -16,16 +16,16 @@ public class TaskManager {
         return nextTaskId;
     }
 
-    public Collection<Task> getAllTasks() {
-        return tasks.values();
+    public ArrayList<Task> getAllTasks() {
+        return new ArrayList<>(tasks.values());
     }
 
-    public Collection<Epic> getAllEpics() {
-        return epics.values();
+    public ArrayList<Epic> getAllEpics() {
+        return new ArrayList<>(epics.values());
     }
 
-    public Collection<Subtask> getAllSubtasks() {
-        return subtasks.values();
+    public ArrayList<Subtask> getAllSubtasks() {
+        return new ArrayList<>(subtasks.values());
     }
 
     public Task getTaskById(int id) {
@@ -44,12 +44,12 @@ public class TaskManager {
         nextTaskId++;
     }
 
-    public void addTask(Epic epic) {
+    public void addEpic(Epic epic) {
         epics.put(epic.getId(), epic);
         nextTaskId++;
     }
 
-    public void addTask(Subtask subtask) {
+    public void addSubtask(Subtask subtask) {
         subtasks.put(subtask.getId(), subtask);
         subtask.getEpic().addSubtask(subtask);
         subtask.getEpic().updateStatus();
@@ -60,11 +60,11 @@ public class TaskManager {
         tasks.put(task.getId(), task);
     }
 
-    public void updateTask(Epic epic) {
+    public void updateEpic(Epic epic) {
         epics.put(epic.getId(), epic);
     }
 
-    public void updateTask(Subtask subtask) {
+    public void updateSubtask(Subtask subtask) {
         subtasks.put(subtask.getId(), subtask);
         subtask.getEpic().updateStatus();
     }
@@ -85,8 +85,8 @@ public class TaskManager {
         }
     }
 
-    public Collection<Subtask> getEpicSubTasks(Epic epic) {
-        return epic.getSubtasks();
+    public ArrayList<Subtask> getEpicSubTasks(Epic epic) {
+        return new ArrayList<>(epic.getSubtasks());
     }
 
     public void deleteAllTasks() {
@@ -103,11 +103,5 @@ public class TaskManager {
     public void deleteAllEpics() {
         epics.clear();
         subtasks.clear();
-    }
-
-    public void deleteAll() {
-        tasks.clear();
-        subtasks.clear();
-        epics.clear();
     }
 }

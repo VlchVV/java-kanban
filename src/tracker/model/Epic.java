@@ -1,7 +1,6 @@
 package tracker.model;
 
 import tracker.Status;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
