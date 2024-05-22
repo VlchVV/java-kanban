@@ -2,13 +2,14 @@ import tracker.Status;
 import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Task;
+import tracker.service.Managers;
 import tracker.service.TaskManager;
 
 public class Main {
 
     public static void main(String[] args) {
         System.out.println("Поехали!");
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = Managers.getDefault();
 
         Task task = new Task(taskManager.getNextTaskId(), "Задача 1", "");
         taskManager.addTask(task);
@@ -34,11 +35,40 @@ public class Main {
         System.out.println(taskManager.getAllTasks());
         System.out.println(taskManager.getAllEpics());
         System.out.println(taskManager.getAllSubtasks());
-        System.out.println(taskManager.getTaskById(3));
+        System.out.println(taskManager.getTask(4));
+        System.out.println(taskManager.getTask(3));
+        System.out.println(taskManager.getTask(3));
         taskManager.deleteTaskById(3);
         taskManager.deleteTaskById(6);
         System.out.println(taskManager.getAllTasks());
         System.out.println(taskManager.getAllEpics());
         System.out.println(taskManager.getAllSubtasks());
+        System.out.println("HISTORY:");
+        System.out.println(taskManager.getHistory());
+        printAllTasks(taskManager);
+    }
+
+    private static void printAllTasks(TaskManager manager) {
+        System.out.println("Задачи:");
+        for (Task task : manager.getAllTasks()) {
+            System.out.println(task);
+        }
+        System.out.println("Эпики:");
+        for (Epic epic : manager.getAllEpics()) {
+            System.out.println(epic);
+
+            for (Task task : manager.getEpicSubTasks(epic)) {
+                System.out.println("--> " + task);
+            }
+        }
+        System.out.println("Подзадачи:");
+        for (Task subtask : manager.getAllSubtasks()) {
+            System.out.println(subtask);
+        }
+
+        System.out.println("История:");
+        for (Task task : manager.getHistory()) {
+            System.out.println(task);
+        }
     }
 }

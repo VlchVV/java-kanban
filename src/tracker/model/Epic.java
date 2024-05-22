@@ -1,11 +1,12 @@
 package tracker.model;
 
 import tracker.Status;
+
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 public class Epic extends Task {
-    private final ArrayList<Subtask> subtasks = new ArrayList<>();
+    private final List<Subtask> subtasks = new ArrayList<>();
     public Epic(int id, String name, String description) {
         super(id, name, description);
     }
@@ -30,7 +31,7 @@ public class Epic extends Task {
         subtasks.add(subtask);
     }
 
-    public Collection<Subtask> getSubtasks() {
+    public List<Subtask> getSubtasks() {
         return subtasks;
     }
 
