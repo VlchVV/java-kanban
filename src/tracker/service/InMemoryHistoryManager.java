@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InMemoryHistoryManager implements HistoryManager{
+public class InMemoryHistoryManager implements HistoryManager {
+    private final Map<Integer, Node<Task>> taskHistory = new HashMap<>();
     private Node<Task> head;
     private Node<Task> tail;
     private int size = 0;
-    private final Map<Integer, Node<Task>> taskHistory = new HashMap<>();
 
     private Node<Task> linkLast(Task task) {
         final Node<Task> oldTail = tail;
@@ -36,7 +36,7 @@ public class InMemoryHistoryManager implements HistoryManager{
         return tasks;
     }
 
-    private void removeNode (Node<Task> node) {
+    private void removeNode(Node<Task> node) {
         Node<Task> next = node.next;
         Node<Task> prev = node.prev;
 
