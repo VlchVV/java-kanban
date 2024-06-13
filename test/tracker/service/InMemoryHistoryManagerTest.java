@@ -23,27 +23,38 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void add() {
-        final int HISTORY_MAX_SIZE = historyManager.getHistoryMaxSize();
         final Task task = new Task(1, "Test addTask", "Test addTask description");
         final Epic epic = new Epic(2, "Epic addEpic", "Epic addEpic description");
 
-        // Add 1
+        // Add 1 task
         historyManager.add(task);
         assertEquals(1, historyManager.getHistory().size(), "Incorrect history size");
 
-        // Add epic HISTORY_MAX_SIZE - 1 times
-        for (int i = 1; i < HISTORY_MAX_SIZE; i++) {
-            historyManager.add(epic);
-        }
+        // Add epic
+        historyManager.add(epic);
 
-        assertEquals(HISTORY_MAX_SIZE, historyManager.getHistory().size(), "Incorrect history size");
+        assertEquals(2, historyManager.getHistory().size(), "Incorrect history size");
         assertEquals(task, historyManager.getHistory().getFirst(), "Wrong first history element");
         assertEquals(epic, historyManager.getHistory().getLast(), "Wrong last history element");
 
-        // Testing history after reaching Max
+        // Testing history after adding duple task
+        historyManager.add(task);
+        assertEquals(2, historyManager.getHistory().size(), "Incorrect history size");
+        assertEquals(epic, historyManager.getHistory().getFirst(), "Wrong first history element");
+        assertEquals(task, historyManager.getHistory().getLast(), "Wrong last history element");
+    }
+
+    @Test
+    public void remove() {
+        final Task task = new Task(1, "Test addTask", "Test addTask description");
+        final Epic epic = new Epic(2, "Epic addEpic", "Epic addEpic description");
+
+        historyManager.add(task);
         historyManager.add(epic);
 
-        assertEquals(HISTORY_MAX_SIZE, historyManager.getHistory().size(), "Incorrect history size after reaching Max");
-        assertEquals(epic, historyManager.getHistory().getFirst(), "Wrong first history element after reaching Max");
+        historyManager.remove(1);
+        assertEquals(1, historyManager.getHistory().size(), "Incorrect history size");
+        historyManager.remove(2);
+        assertTrue(historyManager.getHistory().isEmpty(), "History should be empty after deleting all.");
     }
 }

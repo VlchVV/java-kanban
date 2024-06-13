@@ -116,6 +116,7 @@ public class InMemoryTaskManager implements TaskManager {
             // remove subtasks for deleted epic
             for (Subtask subtask : epics.get(id).getSubtasks()) {
                 subtasks.remove(subtask.getId());
+                historyManager.remove(subtask.getId());
             }
             epics.remove(id);
         } else if (subtasks.containsKey(id)) {
@@ -123,6 +124,7 @@ public class InMemoryTaskManager implements TaskManager {
             subtasks.get(id).getEpic().updateStatus();
             subtasks.remove(id);
         }
+        historyManager.remove(id);
     }
 
     @Override

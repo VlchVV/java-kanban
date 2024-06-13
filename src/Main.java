@@ -1,4 +1,3 @@
-import tracker.Status;
 import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Task;
@@ -23,23 +22,35 @@ public class Main {
         taskManager.addSubtask(subtask);
         Subtask subtask2 = new Subtask(taskManager.getNextTaskId(), "Подзадача 2 эпик 1", "", epic);
         taskManager.addSubtask(subtask2);
-        Subtask subtask3 = new Subtask(taskManager.getNextTaskId(), "Подзадача 3 эпик 2", "", epic2);
+        Subtask subtask3 = new Subtask(taskManager.getNextTaskId(), "Подзадача 3 эпик 1", "", epic);
         taskManager.addSubtask(subtask3);
-        System.out.println(taskManager.getAllTasks());
-        System.out.println(taskManager.getAllEpics());
-        System.out.println(taskManager.getAllSubtasks());
-        subtask3.setStatus(Status.DONE);
-        subtask2.setStatus(Status.IN_PROGRESS);
-        taskManager.updateSubtask(subtask3);
-        taskManager.updateSubtask(subtask2);
-        System.out.println(taskManager.getAllTasks());
-        System.out.println(taskManager.getAllEpics());
-        System.out.println(taskManager.getAllSubtasks());
-        System.out.println(taskManager.getTask(4));
-        System.out.println(taskManager.getTask(3));
-        System.out.println(taskManager.getTask(3));
+        taskManager.getTask(1);
+        taskManager.getTask(2);
+        taskManager.getEpic(3);
+        taskManager.getEpic(4);
+        taskManager.getSubTask(5);
+        taskManager.getSubTask(6);
+
+        System.out.println("HISTORY 1:");
+        System.out.println(taskManager.getHistory());
+
+        taskManager.getTask(1);
+        taskManager.getEpic(3);
+
+        System.out.println("HISTORY 2 check duplication:");
+        System.out.println(taskManager.getHistory());
+
+        taskManager.deleteTaskById(1);
+
+        System.out.println("HISTORY 3 del task:");
+        System.out.println(taskManager.getHistory());
+
         taskManager.deleteTaskById(3);
-        taskManager.deleteTaskById(6);
+
+        System.out.println("HISTORY 4 del epic with subtasks:");
+        System.out.println(taskManager.getHistory());
+
+        System.out.println("OTHER INFO:");
         System.out.println(taskManager.getAllTasks());
         System.out.println(taskManager.getAllEpics());
         System.out.println(taskManager.getAllSubtasks());
