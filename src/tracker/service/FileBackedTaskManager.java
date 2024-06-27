@@ -18,7 +18,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
     public static void main(String[] args) {
         FileBackedTaskManager taskManager =
-                loadFromFile("/Users/valchevski/IdeaProjects/java-kanban/resources/manager.txt");
+                loadFromFile("resources/manager.txt");
         Task task = new Task(taskManager.getNextTaskId(), "Задача 1", "");
         taskManager.addTask(task);
         Task task2 = new Task(taskManager.getNextTaskId(), "Задача 2", "222");
@@ -57,7 +57,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
             }
             fileBackedTaskManager.nextTaskId = nextTaskId;
         } catch (IOException e) {
-            System.out.println("Произошла ошибка во время чтения файла.");
+            throw new ManagerSaveException("Произошла ошибка при сохранении файла");
         }
         return fileBackedTaskManager;
     }
@@ -78,7 +78,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 fileWriter.write("\n");
             }
         } catch (IOException e) {
-            throw new ManagerSaveException(e);
+            throw new ManagerSaveException("Произошла ошибка при сохранении файла");
         }
     }
 

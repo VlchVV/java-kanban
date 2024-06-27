@@ -15,7 +15,7 @@ import static tracker.Status.DONE;
 
 class FileBackedTaskManagerTest {
     private static final String fileName =
-            "/Users/valchevski/IdeaProjects/java-kanban/resources/FileBackedTaskManagerTest.txt";
+            "resources/FileBackedTaskManagerTest.txt";
     private FileBackedTaskManager taskManager;
 
     @AfterAll
