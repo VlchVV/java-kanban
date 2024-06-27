@@ -15,7 +15,7 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Subtask> subtasks = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
-    private int nextTaskId = 1;
+    protected int nextTaskId = 1;
 
     @Override
     public int getNextTaskId() {

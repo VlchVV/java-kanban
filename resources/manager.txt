@@ -1,0 +1,40 @@
+40
+1,TASK,Задача 1,NEW,,
+33,TASK,Задача 1,NEW,,
+2,TASK,Задача 2,NEW,222,
+34,TASK,Задача 2,NEW,222,
+19,TASK,Задача 1,NEW,,
+20,TASK,Задача 2,NEW,222,
+5,TASK,Задача 1,NEW,,
+6,TASK,Задача 2,NEW,222,
+26,TASK,Задача 1,NEW,,
+27,TASK,Задача 2,NEW,222,
+12,TASK,Задача 1,NEW,,
+13,TASK,Задача 2,NEW,222,
+3,EPIC,Эпик 1,NEW,,
+35,EPIC,Эпик 1,NEW,,
+4,EPIC,Эпик 2,NEW,,
+36,EPIC,Эпик 2,NEW,,
+21,EPIC,Эпик 1,NEW,,
+22,EPIC,Эпик 2,NEW,,
+7,EPIC,Эпик 1,NEW,,
+8,EPIC,Эпик 2,NEW,,
+28,EPIC,Эпик 1,NEW,,
+29,EPIC,Эпик 2,NEW,,
+14,EPIC,Эпик 1,NEW,,
+15,EPIC,Эпик 2,NEW,,
+32,SUBTASK,Подзадача 3 эпик 2,NEW,,29
+37,SUBTASK,Подзадача 1 эпик 1,NEW,,35
+38,SUBTASK,Подзадача 2 эпик 1,NEW,,35
+39,SUBTASK,Подзадача 3 эпик 2,NEW,,36
+9,SUBTASK,Подзадача 1 эпик 1,NEW,,7
+10,SUBTASK,Подзадача 2 эпик 1,NEW,,7
+11,SUBTASK,Подзадача 3 эпик 2,NEW,,8
+16,SUBTASK,Подзадача 1 эпик 1,NEW,,14
+17,SUBTASK,Подзадача 2 эпик 1,NEW,,14
+18,SUBTASK,Подзадача 3 эпик 2,NEW,,15
+23,SUBTASK,Подзадача 1 эпик 1,NEW,,21
+24,SUBTASK,Подзадача 2 эпик 1,NEW,,21
+25,SUBTASK,Подзадача 3 эпик 2,NEW,,22
+30,SUBTASK,Подзадача 1 эпик 1,NEW,,28
+31,SUBTASK,Подзадача 2 эпик 1,NEW,,28
