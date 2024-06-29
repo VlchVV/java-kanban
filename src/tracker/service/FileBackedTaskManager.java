@@ -8,12 +8,14 @@ import tracker.model.Task;
 import tracker.utils.TaskCsvConverter;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
-    private final String filename;
+public class FileBackedTaskManager extends InMemoryTaskManager {
+    private final File file;
 
-    private FileBackedTaskManager(String filename) {
-        this.filename = filename;
+    private FileBackedTaskManager(File file) {
+        this.file = file;
     }
 
     public static void main(String[] args) {
@@ -36,7 +38,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     public static FileBackedTaskManager loadFromFile(String filename) {
-        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(filename);
+        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(new File(filename));
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filename))) {
             int nextTaskId = 1;
             if (bufferedReader.ready()) {
@@ -63,7 +65,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     private void save() {
-        try (FileWriter fileWriter = new FileWriter(filename)) {
+        try (FileWriter fileWriter = new FileWriter(file)) {
             fileWriter.write(getNextTaskId() + "\n");
             for (Task task : getAllTasks()) {
                 fileWriter.write(TaskCsvConverter.toCSV(task));
@@ -133,6 +135,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     @Override
+    public ArrayList<Subtask> getEpicSubTasks(Epic epic) {
+        return super.getEpicSubTasks(epic);
+    }
+
+    @Override
     public void deleteAllTasks() {
         super.deleteAllTasks();
         save();
@@ -148,6 +155,46 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     public void deleteAllEpics() {
         super.deleteAllEpics();
         save();
+    }
+
+    @Override
+    public int getNextTaskId() {
+        return super.getNextTaskId();
+    }
+
+    @Override
+    public List<Task> getAllTasks() {
+        return super.getAllTasks();
+    }
+
+    @Override
+    public List<Epic> getAllEpics() {
+        return super.getAllEpics();
+    }
+
+    @Override
+    public List<Subtask> getAllSubtasks() {
+        return super.getAllSubtasks();
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return super.getHistory();
+    }
+
+    @Override
+    public Task getTask(int id) {
+        return super.getTask(id);
+    }
+
+    @Override
+    public Epic getEpic(int id) {
+        return super.getEpic(id);
+    }
+
+    @Override
+    public Subtask getSubTask(int id) {
+        return super.getSubTask(id);
     }
 
     @Override
