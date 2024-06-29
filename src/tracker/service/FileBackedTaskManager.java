@@ -20,7 +20,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public static void main(String[] args) {
         FileBackedTaskManager taskManager =
-                loadFromFile("resources/manager.txt");
+                loadFromFile(new File("resources/manager.txt"));
         Task task = new Task(taskManager.getNextTaskId(), "Задача 1", "");
         taskManager.addTask(task);
         Task task2 = new Task(taskManager.getNextTaskId(), "Задача 2", "222");
@@ -37,9 +37,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         taskManager.addSubtask(subtask3);
     }
 
-    public static FileBackedTaskManager loadFromFile(String filename) {
-        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(new File(filename));
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filename))) {
+    public static FileBackedTaskManager loadFromFile(File file) {
+        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             int nextTaskId = 1;
             if (bufferedReader.ready()) {
                 nextTaskId = Integer.parseInt(bufferedReader.readLine());

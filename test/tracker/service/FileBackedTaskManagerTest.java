@@ -6,6 +6,7 @@ import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Task;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -14,20 +15,19 @@ import static org.junit.jupiter.api.Assertions.*;
 import static tracker.Status.DONE;
 
 class FileBackedTaskManagerTest {
-    private static final String fileName =
-            "resources/FileBackedTaskManagerTest.txt";
+    private static final File file = new File("resources/FileBackedTaskManagerTest.txt");
     private FileBackedTaskManager taskManager;
 
     @AfterAll
     public static void afterAll() throws IOException {
         // clears file after finishing
-        FileWriter fileWriter = new FileWriter(fileName, false);
+        FileWriter fileWriter = new FileWriter(file, false);
         fileWriter.close();
     }
 
     @Test
     void loadFromFile() {
-        taskManager = FileBackedTaskManager.loadFromFile(fileName);
+        taskManager = FileBackedTaskManager.loadFromFile(file);
         assertEquals(1, taskManager.getNextTaskId(), "Next Id must be 1 initially");
         assertTrue(taskManager.getAllTasks().isEmpty(), "Tasks should be empty initially.");
         assertTrue(taskManager.getAllEpics().isEmpty(), "Epics should be empty initially.");
@@ -37,7 +37,7 @@ class FileBackedTaskManagerTest {
         final Task task = new Task(taskId, "Test addTask", "Test addTask description");
         taskManager.addTask(task);
 
-        taskManager = FileBackedTaskManager.loadFromFile(fileName);
+        taskManager = FileBackedTaskManager.loadFromFile(file);
         final Task savedTask = taskManager.getTask(taskId);
 
         assertNotNull(savedTask, "Task not found.");
@@ -54,7 +54,7 @@ class FileBackedTaskManagerTest {
         task.setStatus(DONE);
         taskManager.updateTask(task);
 
-        taskManager = FileBackedTaskManager.loadFromFile(fileName);
+        taskManager = FileBackedTaskManager.loadFromFile(file);
         final Task updatedTask = taskManager.getTask(taskId);
 
         assertEquals("updateTask", updatedTask.getName(), "Incorrect updated Task name");
@@ -70,7 +70,7 @@ class FileBackedTaskManagerTest {
         taskManager.addSubtask(subtask);
 
 
-        taskManager = FileBackedTaskManager.loadFromFile(fileName);
+        taskManager = FileBackedTaskManager.loadFromFile(file);
         final Subtask savedSubtask = taskManager.getSubTask(subtaskId);
 
         assertEquals(1, epic.getSubtasks().size(), "Wrong count of epic subtasks");
@@ -88,7 +88,7 @@ class FileBackedTaskManagerTest {
         subtask.setStatus(DONE);
         taskManager.updateSubtask(subtask);
 
-        taskManager = FileBackedTaskManager.loadFromFile(fileName);
+        taskManager = FileBackedTaskManager.loadFromFile(file);
         final Subtask updatedSubtask = taskManager.getSubTask(subtaskId);
 
         assertEquals("updateSubtasks", updatedSubtask.getName(), "Incorrect updated Subtasks name");
@@ -98,7 +98,7 @@ class FileBackedTaskManagerTest {
         taskManager.deleteAllSubtasks();
         taskManager.deleteAllTasks();
 
-        taskManager = FileBackedTaskManager.loadFromFile(fileName);
+        taskManager = FileBackedTaskManager.loadFromFile(file);
         assertTrue(taskManager.getAllSubtasks().isEmpty(), "Subtasks count is not correct after delete");
         assertTrue(taskManager.getAllTasks().isEmpty(), "Tasks count is not correct after delete");
     }
