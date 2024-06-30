@@ -1,44 +1,43 @@
 package tracker.service;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Task;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static tracker.Status.DONE;
-import static tracker.Status.NEW;
 
-class InMemoryTaskManagerTest {
-    private InMemoryTaskManager taskManager;
+class FileBackedTaskManagerTest {
+    private static final File file = new File("resources/FileBackedTaskManagerTest.txt");
+    private FileBackedTaskManager taskManager;
 
-    @BeforeEach
-    public void beforeEach() {
-        taskManager = new InMemoryTaskManager();
+    @AfterAll
+    public static void afterAll() throws IOException {
+        // clears file after finishing
+        FileWriter fileWriter = new FileWriter(file, false);
+        fileWriter.close();
     }
 
     @Test
-    public void getNextTaskId() {
-        final int taskId = taskManager.getNextTaskId();
-        final Task task = new Task(taskId, "Test getNextTaskId", "Test getNextTaskId description");
-        taskManager.addTask(task);
-        assertTrue(taskManager.getNextTaskId() > taskId, "Task Id did not increment.");
-    }
+    void loadFromFile() {
+        taskManager = FileBackedTaskManager.loadFromFile(file);
+        assertEquals(1, taskManager.getNextTaskId(), "Next Id must be 1 initially");
+        assertTrue(taskManager.getAllTasks().isEmpty(), "Tasks should be empty initially.");
+        assertTrue(taskManager.getAllEpics().isEmpty(), "Epics should be empty initially.");
+        assertTrue(taskManager.getAllSubtasks().isEmpty(), "Subtasks should be empty initially.");
 
-    @Test
-    public void getHistory() {
-        assertTrue(taskManager.getHistory().isEmpty(), "History should be empty initially.");
-    }
-
-    @Test
-    public void testTask() {
         final int taskId = taskManager.getNextTaskId();
         final Task task = new Task(taskId, "Test addTask", "Test addTask description");
         taskManager.addTask(task);
 
+        taskManager = FileBackedTaskManager.loadFromFile(file);
         final Task savedTask = taskManager.getTask(taskId);
 
         assertNotNull(savedTask, "Task not found.");
@@ -55,50 +54,13 @@ class InMemoryTaskManagerTest {
         task.setStatus(DONE);
         taskManager.updateTask(task);
 
+        taskManager = FileBackedTaskManager.loadFromFile(file);
         final Task updatedTask = taskManager.getTask(taskId);
 
         assertEquals("updateTask", updatedTask.getName(), "Incorrect updated Task name");
         assertEquals("Test updateTask description", updatedTask.getDescription(), "Incorrect updated Task description");
         assertEquals(DONE, updatedTask.getStatus(), "Incorrect updated Task status");
 
-        taskManager.deleteAllTasks();
-        assertTrue(taskManager.getAllTasks().isEmpty(), "Tasks count is not correct after delete");
-    }
-
-    @Test
-    public void testEpic() {
-        final int epicId = taskManager.getNextTaskId();
-        final Epic epic = new Epic(epicId, "Epic addEpic", "Epic addEpic description");
-        taskManager.addEpic(epic);
-
-        final Epic savedEpic = taskManager.getEpic(epicId);
-
-        assertNotNull(savedEpic, "Epic not found.");
-        assertEquals(epic, savedEpic, "Epics not equal.");
-
-        final List<Epic> epics = taskManager.getAllEpics();
-
-        assertNotNull(epics, "Epics not returned");
-        assertEquals(1, epics.size(), "Epics count is not correct");
-        assertEquals(epic, epics.get(0), "Epic in list is not equal to original Epic.");
-
-        epic.setName("updateEpic");
-        epic.setDescription("Test updateEpic description");
-        epic.setStatus(DONE);
-        taskManager.updateEpic(epic);
-
-        final Epic updatedEpic = taskManager.getEpic(epicId);
-
-        assertEquals("updateEpic", updatedEpic.getName(), "Incorrect updated Epic name");
-        assertEquals("Test updateEpic description", updatedEpic.getDescription(), "Incorrect updated Epic description");
-        assertEquals(NEW, updatedEpic.getStatus(), "Incorrect Epic status - should not be updated");
-
-        taskManager.deleteAllEpics();
-        assertTrue(taskManager.getAllEpics().isEmpty(), "Epics count is not correct after delete");
-    }
-
-    @Test
-    public void testSubtask() {
         final int epicId = taskManager.getNextTaskId();
         final Epic epic = new Epic(epicId, "Epic addSubtask", "Epic addSubtask description");
         taskManager.addEpic(epic);
@@ -106,8 +68,12 @@ class InMemoryTaskManagerTest {
         final int subtaskId = taskManager.getNextTaskId();
         final Subtask subtask = new Subtask(subtaskId, "Subtask addSubtask", "Subtask addSubtask description", epic);
         taskManager.addSubtask(subtask);
+
+
+        taskManager = FileBackedTaskManager.loadFromFile(file);
         final Subtask savedSubtask = taskManager.getSubTask(subtaskId);
 
+        assertEquals(1, epic.getSubtasks().size(), "Wrong count of epic subtasks");
         assertNotNull(savedSubtask, "Subtask not found.");
         assertEquals(subtask, savedSubtask, "Subtasks not equal.");
 
@@ -122,6 +88,7 @@ class InMemoryTaskManagerTest {
         subtask.setStatus(DONE);
         taskManager.updateSubtask(subtask);
 
+        taskManager = FileBackedTaskManager.loadFromFile(file);
         final Subtask updatedSubtask = taskManager.getSubTask(subtaskId);
 
         assertEquals("updateSubtasks", updatedSubtask.getName(), "Incorrect updated Subtasks name");
@@ -129,6 +96,10 @@ class InMemoryTaskManagerTest {
         assertEquals(DONE, updatedSubtask.getStatus(), "Incorrect updated Subtasks status");
 
         taskManager.deleteAllSubtasks();
+        taskManager.deleteAllTasks();
+
+        taskManager = FileBackedTaskManager.loadFromFile(file);
         assertTrue(taskManager.getAllSubtasks().isEmpty(), "Subtasks count is not correct after delete");
+        assertTrue(taskManager.getAllTasks().isEmpty(), "Tasks count is not correct after delete");
     }
 }
