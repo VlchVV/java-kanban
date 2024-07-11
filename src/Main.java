@@ -9,7 +9,6 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Поехали!");
         TaskManager taskManager = Managers.getDefault();
-
         Task task = new Task(taskManager.getNextTaskId(), "Задача 1", "");
         taskManager.addTask(task);
         Task task2 = new Task(taskManager.getNextTaskId(), "Задача 2", "222");

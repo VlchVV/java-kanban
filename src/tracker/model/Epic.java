@@ -2,11 +2,15 @@ package tracker.model;
 
 import tracker.Status;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Epic extends Task {
     private final List<Subtask> subtasks = new ArrayList<>();
+    protected LocalDateTime endTime;
 
     public Epic(int id, String name, String description) {
         super(id, name, description);
@@ -15,6 +19,36 @@ public class Epic extends Task {
     @Override
     public void setStatus(Status status) {
         updateStatus();
+    }
+
+    private void updateStartTime() {
+        startTime = subtasks.stream()
+                .filter(subtask -> subtask.getStartTime() != null)
+                .min(Comparator.comparing(Subtask::getStartTime))
+                .map(Subtask::getStartTime)
+                .orElse(null);
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    private void updateEndTime() {
+        endTime = subtasks.stream()
+                .filter(subtask -> subtask.getEndTime() != null)
+                .max(Comparator.comparing(Subtask::getEndTime))
+                .map(Subtask::getEndTime)
+                .orElse(null);
+    }
+
+    @Override
+    public Duration getDuration() {
+        if (endTime == null || startTime == null) {
+            return null;
+        } else {
+            return Duration.between(startTime, endTime);
+        }
     }
 
     @Override
@@ -36,8 +70,14 @@ public class Epic extends Task {
         return subtasks;
     }
 
+    public void updateEpic() {
+        updateStatus();
+        updateStartTime();
+        updateEndTime();
+    }
+
     // Обновление статуса эпика в зависимости от статусов подзадач
-    public void updateStatus() {
+    private void updateStatus() {
         // NEW if no subtasks
         if (subtasks.isEmpty()) {
             super.setStatus(Status.NEW);

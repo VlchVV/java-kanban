@@ -8,6 +8,8 @@ import tracker.model.Task;
 import tracker.utils.TaskCsvConverter;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +23,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public static void main(String[] args) {
         FileBackedTaskManager taskManager =
                 loadFromFile(new File("resources/manager.txt"));
-        Task task = new Task(taskManager.getNextTaskId(), "Задача 1", "");
+        Task task = new Task(taskManager.getNextTaskId(), "Задача 1", "", Duration.ofDays(2),
+                LocalDateTime.of(2022, 7, 17, 18, 30));
         taskManager.addTask(task);
-        Task task2 = new Task(taskManager.getNextTaskId(), "Задача 2", "222");
+        Task task2 = new Task(taskManager.getNextTaskId(), "Задача 2", "222", Duration.ofDays(2),
+                LocalDateTime.of(2022, 7, 19, 18, 29));
         taskManager.addTask(task2);
         Epic epic = new Epic(taskManager.getNextTaskId(), "Эпик 1", "");
         taskManager.addEpic(epic);
@@ -85,21 +89,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private Task fromString(String value) {
-        String[] taskParams = value.split(",", 6);
+        String[] taskParams = value.split(",", 8);
         TaskTypes type = TaskTypes.valueOf(taskParams[1]);
-        Task task = null;
-        switch (type) {
-            case EPIC:
-                task = new Epic(Integer.parseInt(taskParams[0]), taskParams[2], taskParams[4]);
-                break;
-            case TASK:
-                task = new Task(Integer.parseInt(taskParams[0]), taskParams[2], taskParams[4]);
-                break;
-            case SUBTASK:
-                task = new Subtask(Integer.parseInt(taskParams[0]), taskParams[2], taskParams[4],
-                        getEpic(Integer.parseInt(taskParams[5])));
-                break;
-        }
+        Task task = switch (type) {
+            case EPIC -> new Epic(Integer.parseInt(taskParams[0]), taskParams[2], taskParams[4]);
+            case TASK -> new Task(Integer.parseInt(taskParams[0]), taskParams[2], taskParams[4],
+                    taskParams[5].isBlank() ? null : Duration.parse(taskParams[5]),
+                    taskParams[6].isBlank() ? null : LocalDateTime.parse(taskParams[6]));
+            case SUBTASK -> new Subtask(Integer.parseInt(taskParams[0]), taskParams[2], taskParams[4],
+                    taskParams[5].isBlank() ? null : Duration.parse(taskParams[5]),
+                    taskParams[6].isBlank() ? null : LocalDateTime.parse(taskParams[6]),
+                    getEpic(Integer.parseInt(taskParams[7])));
+        };
         task.setStatus(Status.valueOf(taskParams[3]));
         return task;
     }
