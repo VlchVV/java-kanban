@@ -5,8 +5,6 @@ import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Task;
 
-import java.util.Objects;
-
 public class TaskCsvConverter {
     public static String toCSV(Task task) {
         return task.getId() +
