@@ -12,7 +12,9 @@ public class TaskCsvConverter {
                 "," + task.getName() +
                 "," + task.getStatus() +
                 "," + task.getDescription() +
-                ",";
+                "," + (task.getDuration() == null ? "" : task.getDuration()) +
+                "," + (task.getStartTime() == null ? "" : task.getStartTime()) +
+                "," /* no epic */;
     }
 
     public static String toCSV(Subtask subtask) {
@@ -21,6 +23,8 @@ public class TaskCsvConverter {
                 "," + subtask.getName() +
                 "," + subtask.getStatus() +
                 "," + subtask.getDescription() +
+                "," + (subtask.getDuration() == null ? "" : subtask.getDuration()) +
+                "," + (subtask.getStartTime() == null ? "" : subtask.getStartTime()) +
                 "," + subtask.getEpic().getId();
     }
 
@@ -30,6 +34,8 @@ public class TaskCsvConverter {
                 "," + epic.getName() +
                 "," + epic.getStatus() +
                 "," + epic.getDescription() +
-                ",";
+                "," /* no duration */ +
+                "," /* no start date */ +
+                "," /* no epic */;
     }
 }

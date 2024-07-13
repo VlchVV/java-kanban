@@ -6,6 +6,7 @@ import tracker.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 public interface TaskManager {
     int getNextTaskId();
@@ -45,4 +46,6 @@ public interface TaskManager {
     void deleteAllSubtasks();
 
     void deleteAllEpics();
+
+    TreeSet<Task> getPrioritizedTasks();
 }
