@@ -183,7 +183,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         Task task2 = new Task(taskManager.getNextTaskId(), "Задача 2", "222", Duration.ofDays(2),
                 LocalDateTime.of(2022, 7, 19, 18, 29));
-        taskManager.addTask(task2);
+        assertThrows(TaskOverlappingException.class, () -> taskManager.addTask(task2),
+                "Tasks are overlapping");
         assertEquals(1, taskManager.getAllTasks().size(),
                 "Tasks count is not correct. Tasks are overlapping");
 
@@ -193,9 +194,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(2, taskManager.getAllTasks().size(),
                 "Tasks count is not correct. Tasks are not overlapping");
 
-        task3 = new Task(task3.getId(), "Задача 3", "222", Duration.ofDays(2),
+        Task updatedTask3 = new Task(task3.getId(), "Задача 3", "222", Duration.ofDays(2),
                 LocalDateTime.of(2022, 7, 18, 18, 30));
-        taskManager.updateTask(task3);
+        assertThrows(TaskOverlappingException.class, () -> taskManager.updateTask(updatedTask3),
+                "Tasks are overlapping");
 
         assertEquals(LocalDateTime.of(2022, 7, 19, 18, 30),
                 taskManager.getTask(task3.getId()).getStartTime(),
@@ -226,7 +228,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
         Subtask subtask2 = new Subtask(subtask2Id, "Subtask 2",
                 "Subtask 2 description", Duration.ofDays(2),
                 LocalDateTime.of(2022, 7, 17, 18, 30), epic);
-        taskManager.addSubtask(subtask2);
+        assertThrows(TaskOverlappingException.class, () -> taskManager.addSubtask(subtask2),
+                "Tasks are overlapping");
 
         assertEquals(1, taskManager.getAllSubtasks().size(),
                 "Tasks count is not correct. New subtask is overlapping with task");

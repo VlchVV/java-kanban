@@ -1,6 +1,7 @@
 package tracker.model;
 
 import tracker.Status;
+import tracker.TaskTypes;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ public class Epic extends Task {
 
     public Epic(int id, String name, String description) {
         super(id, name, description);
+        this.type = TaskTypes.EPIC;
     }
 
     @Override
