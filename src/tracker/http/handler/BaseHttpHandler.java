@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 
 public class BaseHttpHandler implements HttpHandler {
     protected final TaskManager taskManager;
-    private final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+    private final Charset DEFAULTCHARSET = StandardCharsets.UTF_8;
     protected Gson gson;
 
     public BaseHttpHandler(TaskManager taskManager) {
@@ -51,7 +51,7 @@ public class BaseHttpHandler implements HttpHandler {
     }
 
     protected void sendText(HttpExchange exchange, String text, int rCode) throws IOException {
-        byte[] resp = text.getBytes(DEFAULT_CHARSET);
+        byte[] resp = text.getBytes(DEFAULTCHARSET);
         exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         exchange.sendResponseHeaders(rCode, resp.length);
         exchange.getResponseBody().write(resp);
