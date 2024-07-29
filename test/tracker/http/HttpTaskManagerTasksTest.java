@@ -56,7 +56,7 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void testAddTask() throws IOException, InterruptedException {
+    public void addTaskReturns201() throws IOException, InterruptedException {
         Task task = new Task(manager.getNextTaskId(), "Test 2", "Testing task 2",
                 Duration.ofMinutes(5), LocalDateTime.now());
         String taskJson = gson.toJson(task).replaceFirst("id", "id_old");
@@ -76,7 +76,7 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void testGetAllTasks() throws IOException, InterruptedException {
+    public void getAllTasksReturns200() throws IOException, InterruptedException {
         int id = manager.getNextTaskId();
         Task task = new Task(id, "Test 2", "Testing task 2",
                 Duration.ofMinutes(5), LocalDateTime.now());
@@ -92,7 +92,7 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void testGetTaskByCorrectId() throws IOException, InterruptedException {
+    public void getTaskByCorrectIdReturns200() throws IOException, InterruptedException {
         int id = manager.getNextTaskId();
         Task task = new Task(id, "Test 2", "Testing task 2",
                 Duration.ofMinutes(5), LocalDateTime.now());
@@ -108,7 +108,7 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void testGetTaskByIncorrectId() throws IOException, InterruptedException {
+    public void getTaskByIncorrectIdReturns404() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/tasks/0");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
@@ -118,7 +118,7 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void testDeleteTaskByIncorrectId() throws IOException, InterruptedException {
+    public void deleteTaskByIncorrectIdReturns200() throws IOException, InterruptedException {
         int id = manager.getNextTaskId();
         Task task = new Task(id, "Test 2", "Testing task 2",
                 Duration.ofMinutes(5), LocalDateTime.now());
@@ -134,10 +134,8 @@ public class HttpTaskManagerTasksTest {
         assertEquals(0, manager.getAllTasks().size(), "Wrong tasks count");
     }
 
-    /////
-
     @Test
-    public void testAddEpicAndSubtask() throws IOException, InterruptedException {
+    public void addEpicAndSubtaskReturn201() throws IOException, InterruptedException {
         Epic epic = new Epic(manager.getNextTaskId(), "Test 1", "Testing epic 1");
         String epicJson = gson.toJson(epic).replaceFirst("id", "id_old");
 
@@ -172,7 +170,7 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void testGetAllEpicsAndSubtasks() throws IOException, InterruptedException {
+    public void getAllEpicsAndSubtasksReturn200() throws IOException, InterruptedException {
         int epicId = manager.getNextTaskId();
         Epic epic = new Epic(epicId, "Test 1", "Testing epic 1");
         manager.addTask(epic);
@@ -197,7 +195,7 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void testGetEpicsAndSubtasksByCorrectId() throws IOException, InterruptedException {
+    public void getEpicsAndSubtasksByCorrectIdReturn200() throws IOException, InterruptedException {
         int epicId = manager.getNextTaskId();
         Epic epic = new Epic(epicId, "Test 1", "Testing epic 1");
         manager.addEpic(epic);
@@ -228,7 +226,7 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void testGetEpicByIncorrectId() throws IOException, InterruptedException {
+    public void getEpicByIncorrectIdReturns404() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/epics/0");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
@@ -238,7 +236,7 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void testGetSubtaskByIncorrectId() throws IOException, InterruptedException {
+    public void getSubtaskByIncorrectIdReturns404() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/subtasks/0");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
@@ -248,7 +246,7 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void testDeleteEpicsAndSubtasksByIncorrectId() throws IOException, InterruptedException {
+    public void deleteEpicsAndSubtasksByIncorrectIdReturn200() throws IOException, InterruptedException {
         int epicId = manager.getNextTaskId();
         Epic epic = new Epic(epicId, "Test 1", "Testing epic 1");
         manager.addEpic(epic);
@@ -272,6 +270,5 @@ public class HttpTaskManagerTasksTest {
         response = client.send(request, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, response.statusCode());
         assertEquals(0, manager.getAllEpics().size(), "Wrong epics count");
-
     }
 }
