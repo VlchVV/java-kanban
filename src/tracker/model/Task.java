@@ -1,6 +1,7 @@
 package tracker.model;
 
 import tracker.Status;
+import tracker.TaskTypes;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ public class Task {
     protected String description;
     protected Duration duration;
     protected LocalDateTime startTime;
+    protected TaskTypes type;
 
 
     public Task(int id, String name, String description, Duration duration, LocalDateTime startTime) {
@@ -21,12 +23,14 @@ public class Task {
         this.description = description;
         this.duration = duration;
         this.startTime = startTime;
+        this.type = TaskTypes.TASK;
     }
 
     public Task(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.type = TaskTypes.TASK;
     }
 
     public int getId() {
@@ -97,5 +101,9 @@ public class Task {
 
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
+    }
+
+    public TaskTypes getType() {
+        return type;
     }
 }
